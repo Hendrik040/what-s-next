@@ -104,3 +104,5 @@ npm run client
 - Advanced search and filtering
 - Timeline view
 - Analytics and insights
+- Mobile responsive design improvements
+- Real-time collaboration features
