@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import './Form.css';
 
-function PersonForm({ onSubmit, people }) {
+function PersonForm({ onSubmit, people, events }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+    profession: '',
+    company: '',
+    location: '',
     notes: '',
     tags: '',
+    eventId: '',
   });
 
   const handleChange = (e) => {
@@ -30,7 +34,7 @@ function PersonForm({ onSubmit, people }) {
     };
 
     onSubmit(personData);
-    setFormData({ name: '', email: '', phone: '', notes: '', tags: '' });
+    setFormData({ name: '', email: '', phone: '', profession: '', company: '', location: '', notes: '', tags: '', eventId: '' });
   };
 
   return (
@@ -75,6 +79,59 @@ function PersonForm({ onSubmit, people }) {
         </div>
 
         <div className="form-group">
+          <label htmlFor="profession">Profession</label>
+          <input
+            type="text"
+            id="profession"
+            name="profession"
+            value={formData.profession}
+            onChange={handleChange}
+            placeholder="Software Engineer, Designer, etc."
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="company">Company</label>
+          <input
+            type="text"
+            id="company"
+            name="company"
+            value={formData.company}
+            onChange={handleChange}
+            placeholder="Company name"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="location">Location</label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            placeholder="City, State/Country"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="eventId">Met at Event (optional)</label>
+          <select
+            id="eventId"
+            name="eventId"
+            value={formData.eventId}
+            onChange={handleChange}
+          >
+            <option value="">Select an event...</option>
+            {events && events.map(event => (
+              <option key={event.id} value={event.id}>
+                {event.name} - {new Date(event.date).toLocaleDateString()}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group">
           <label htmlFor="notes">Notes</label>
           <textarea
             id="notes"
@@ -108,7 +165,9 @@ function PersonForm({ onSubmit, people }) {
             {people.map(person => (
               <li key={person.id}>
                 <strong>{person.name}</strong>
-                {person.email && <span> - {person.email}</span>}
+                {person.profession && <span> - {person.profession}</span>}
+                {person.company && <span> @ {person.company}</span>}
+                {person.location && <span> ({person.location})</span>}
               </li>
             ))}
           </ul>

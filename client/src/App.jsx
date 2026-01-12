@@ -130,7 +130,7 @@ function App() {
           />
         )}
         {activeTab === 'people' && (
-          <PersonForm onSubmit={handleAddPerson} people={graphData.people} />
+          <PersonForm onSubmit={handleAddPerson} people={graphData.people} events={graphData.events} />
         )}
         {activeTab === 'events' && (
           <EventForm onSubmit={handleAddEvent} events={graphData.events} />

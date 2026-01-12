@@ -132,6 +132,9 @@ function GraphView({ data, onDeletePerson, onDeleteEvent, onDeleteConnection }) 
 
             {selectedNode.type === 'person' && (
               <>
+                {selectedNode.profession && <p><strong>Profession:</strong> {selectedNode.profession}</p>}
+                {selectedNode.company && <p><strong>Company:</strong> {selectedNode.company}</p>}
+                {selectedNode.location && <p><strong>Location:</strong> {selectedNode.location}</p>}
                 {selectedNode.email && <p><strong>Email:</strong> {selectedNode.email}</p>}
                 {selectedNode.phone && <p><strong>Phone:</strong> {selectedNode.phone}</p>}
                 {selectedNode.notes && <p><strong>Notes:</strong> {selectedNode.notes}</p>}

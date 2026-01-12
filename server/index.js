@@ -35,7 +35,7 @@ app.get('/api/graph', (req, res) => {
 
 // People endpoints
 app.post('/api/people', (req, res) => {
-  const { name, email, phone, notes, tags } = req.body;
+  const { name, email, phone, notes, tags, profession, company, location, eventId } = req.body;
 
   if (!name) {
     return res.status(400).json({ error: 'Name is required' });
@@ -47,8 +47,12 @@ app.post('/api/people', (req, res) => {
     name,
     email: email || '',
     phone: phone || '',
+    profession: profession || '',
+    company: company || '',
+    location: location || '',
     notes: notes || '',
     tags: tags || [],
+    eventId: eventId || null,
     createdAt: new Date().toISOString(),
   };
 
@@ -75,14 +79,18 @@ app.put('/api/people/:id', (req, res) => {
     return res.status(404).json({ error: 'Person not found' });
   }
 
-  const { name, email, phone, notes, tags } = req.body;
+  const { name, email, phone, notes, tags, profession, company, location, eventId } = req.body;
   const updated = {
     ...person,
     name: name || person.name,
     email: email !== undefined ? email : person.email,
     phone: phone !== undefined ? phone : person.phone,
+    profession: profession !== undefined ? profession : person.profession,
+    company: company !== undefined ? company : person.company,
+    location: location !== undefined ? location : person.location,
     notes: notes !== undefined ? notes : person.notes,
     tags: tags !== undefined ? tags : person.tags,
+    eventId: eventId !== undefined ? eventId : person.eventId,
     updatedAt: new Date().toISOString(),
   };
 
