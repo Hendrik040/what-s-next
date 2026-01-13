@@ -141,3 +141,8 @@ See README.md for detailed list. Key planned features:
 - Analytics/insights
 - Edit functionality in UI
 - Mobile responsive improvements
+
+
+
+@client/src/components/GraphView.jsx is good 
+

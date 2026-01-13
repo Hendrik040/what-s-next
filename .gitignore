@@ -1,1 +1,9 @@
 node_modules
+
+# Database files (can be regenerated)
+server/data/*.db
+server/data/*.db-shm
+server/data/*.db-wal
+
+# Keep the data directory but ignore its contents except for .gitkeep
+!server/data/.gitkeep

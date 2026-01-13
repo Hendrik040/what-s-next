@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
+import { drawNode } from './GraphNodeRenderer';
 import './GraphView.css';
 
 function GraphView({ data, onDeletePerson, onDeleteEvent, onDeleteConnection }) {
@@ -84,34 +85,18 @@ function GraphView({ data, onDeletePerson, onDeleteEvent, onDeleteConnection }) 
             height={graphSize.height}
             nodeLabel="name"
             nodeAutoColorBy="type"
-            nodeCanvasObject={(node, ctx, globalScale) => {
-              const label = node.name;
-              const fontSize = 12 / globalScale;
-              ctx.font = `${fontSize}px Sans-Serif`;
-              const textWidth = ctx.measureText(label).width;
-              const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.4);
-
-              // Draw node circle
-              ctx.beginPath();
-              ctx.arc(node.x, node.y, 5, 0, 2 * Math.PI, false);
-              ctx.fillStyle = node.color;
-              ctx.fill();
-
-              // Draw label background
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-              ctx.fillRect(
-                node.x - bckgDimensions[0] / 2,
-                node.y + 8,
-                bckgDimensions[0],
-                bckgDimensions[1]
-              );
-
-              // Draw label text
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillStyle = '#000';
-              ctx.fillText(label, node.x, node.y + 8 + fontSize / 2);
-            }}
+            nodeCanvasObject={(node, ctx, globalScale) =>
+              drawNode(ctx, node, globalScale, {
+                label: true,
+                hover: true,
+                highlight: true,
+                size: 5,
+                colors: {
+                  person: '#4CAF50',
+                  event: '#2196F3',
+                }
+              })
+            }
             onNodeClick={handleNodeClick}
             linkDirectionalArrowLength={3.5}
             linkDirectionalArrowRelPos={1}
