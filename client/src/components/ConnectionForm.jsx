@@ -15,7 +15,7 @@ function ConnectionForm({ onSubmit, people, events }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.from || !formData.to) {
       alert('Please select two people to connect');
@@ -33,15 +33,19 @@ function ConnectionForm({ onSubmit, people, events }) {
       eventId: formData.eventId || null,
     };
 
-    onSubmit(connectionData);
-    setFormData({
-      from: '',
-      to: '',
-      relationshipType: 'knows',
-      strength: 1,
-      notes: '',
-      eventId: '',
-    });
+    try {
+      await onSubmit(connectionData);
+      setFormData({
+        from: '',
+        to: '',
+        relationshipType: 'knows',
+        strength: 1,
+        notes: '',
+        eventId: '',
+      });
+    } catch {
+      // Error is handled by parent component's error banner
+    }
   };
 
   return (

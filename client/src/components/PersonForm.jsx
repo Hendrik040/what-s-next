@@ -18,7 +18,7 @@ function PersonForm({ onSubmit, people, events }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim()) {
       alert('Name is required');
@@ -33,8 +33,12 @@ function PersonForm({ onSubmit, people, events }) {
         .filter(tag => tag !== ''),
     };
 
-    onSubmit(personData);
-    setFormData({ name: '', email: '', phone: '', profession: '', company: '', location: '', notes: '', tags: '', eventId: '' });
+    try {
+      await onSubmit(personData);
+      setFormData({ name: '', email: '', phone: '', profession: '', company: '', location: '', notes: '', tags: '', eventId: '' });
+    } catch {
+      // Error is handled by parent component's error banner
+    }
   };
 
   return (
