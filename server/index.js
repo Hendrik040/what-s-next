@@ -179,6 +179,7 @@ app.delete('/api/events/:id', (req, res) => {
     return res.status(404).json({ error: 'Event not found' });
   }
 
+  // Cascade cleanup: clear eventId references (similar to connection cleanup in DELETE /api/people/:id)
   // Clear eventId references from people
   for (const [id, person] of graph.people.entries()) {
     if (person.eventId === req.params.id) {

@@ -18,6 +18,14 @@ function App() {
     loadGraphData();
   }, []);
 
+  // Auto-dismiss error after 5 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   const loadGraphData = async () => {
     try {
       const response = await axios.get(`${API_BASE}/graph`);

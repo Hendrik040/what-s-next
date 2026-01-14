@@ -13,15 +13,19 @@ function EventForm({ onSubmit, events }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim()) {
       alert('Event name is required');
       return;
     }
 
-    onSubmit(formData);
-    setFormData({ name: '', date: '', location: '', description: '' });
+    try {
+      await onSubmit(formData);
+      setFormData({ name: '', date: '', location: '', description: '' });
+    } catch {
+      // Error is handled by parent component's error banner
+    }
   };
 
   return (

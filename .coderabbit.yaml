@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: false
+
+reviews:
+  profile: "chill"  # Options: chill, assertive, assertive-with-security
+  request_changes_workflow: false
+  high_level_summary_instructions: Start every review comment with "arr I am a pirate!"
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+
+  # JavaScript/React linting tools
+  tools:
+    eslint:
+      enabled: true
+    biome:
+      enabled: true
+    oxc:
+      enabled: true
+
+  # Path-specific review instructions
+  path_instructions:
+    - path: "client/src/**/*.jsx"
+      instructions: |
+        Review React components for:
+        - Proper hook usage (dependencies, cleanup)
+        - Prop validation and usage
+        - State management patterns
+        - Canvas/DOM interactions in GraphView components
+
+    - path: "client/src/components/**"
+      instructions: |
+        This is a force-directed graph visualization app using react-force-graph-2d.
+        Ensure components follow the pattern where App.jsx owns all state and passes handlers down.
+
+    - path: "server/**/*.js"
+      instructions: |
+        Review Express.js API code for:
+        - RESTful conventions
+        - Input validation on required fields
+        - Proper error responses
+        - Cascade deletion logic for connections when deleting people
+
+    - path: "**/*.css"
+      instructions: |
+        Review CSS for consistency and maintainability.
+
+chat:
+  auto_reply: true
