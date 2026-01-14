@@ -114,6 +114,10 @@ All endpoints are at `http://localhost:3001/api`
 
 5. **Graph Rendering**: Force-graph library uses Canvas, not SVG/DOM. Custom node rendering happens in `nodeCanvasObject` callback at `GraphView.jsx:40-65`.
 
+## Implementation Guidelines
+
+**External Libraries**: Always use Context7 MCP server when implementing features that require external tooling or libraries. Thoroughly check the documentation and use that context to implement features based on the latest docs rather than potentially outdated knowledge.
+
 ## Common Tasks
 
 **Adding a new entity type**:

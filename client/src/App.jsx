@@ -12,6 +12,7 @@ function App() {
   const [graphData, setGraphData] = useState({ people: [], events: [], connections: [] });
   const [activeTab, setActiveTab] = useState('graph');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     loadGraphData();
@@ -22,18 +23,24 @@ function App() {
       const response = await axios.get(`${API_BASE}/graph`);
       setGraphData(response.data);
       setLoading(false);
-    } catch (error) {
-      console.error('Error loading graph data:', error);
+      setError(null);
+    } catch (err) {
+      console.error('Error loading graph data:', err);
+      setError('Failed to load graph data. Please refresh the page.');
       setLoading(false);
     }
   };
+
+  const clearError = () => setError(null);
 
   const handleAddPerson = async (person) => {
     try {
       await axios.post(`${API_BASE}/people`, person);
       await loadGraphData();
-    } catch (error) {
-      console.error('Error adding person:', error);
+    } catch (err) {
+      const message = err.response?.data?.error || 'Failed to add person';
+      setError(message);
+      throw new Error(message);
     }
   };
 
@@ -41,8 +48,10 @@ function App() {
     try {
       await axios.post(`${API_BASE}/events`, event);
       await loadGraphData();
-    } catch (error) {
-      console.error('Error adding event:', error);
+    } catch (err) {
+      const message = err.response?.data?.error || 'Failed to add event';
+      setError(message);
+      throw new Error(message);
     }
   };
 
@@ -50,8 +59,10 @@ function App() {
     try {
       await axios.post(`${API_BASE}/connections`, connection);
       await loadGraphData();
-    } catch (error) {
-      console.error('Error adding connection:', error);
+    } catch (err) {
+      const message = err.response?.data?.error || 'Failed to add connection';
+      setError(message);
+      throw new Error(message);
     }
   };
 
@@ -59,8 +70,9 @@ function App() {
     try {
       await axios.delete(`${API_BASE}/people/${id}`);
       await loadGraphData();
-    } catch (error) {
-      console.error('Error deleting person:', error);
+    } catch (err) {
+      const message = err.response?.data?.error || 'Failed to delete person';
+      setError(message);
     }
   };
 
@@ -68,8 +80,9 @@ function App() {
     try {
       await axios.delete(`${API_BASE}/events/${id}`);
       await loadGraphData();
-    } catch (error) {
-      console.error('Error deleting event:', error);
+    } catch (err) {
+      const message = err.response?.data?.error || 'Failed to delete event';
+      setError(message);
     }
   };
 
@@ -77,8 +90,9 @@ function App() {
     try {
       await axios.delete(`${API_BASE}/connections/${id}`);
       await loadGraphData();
-    } catch (error) {
-      console.error('Error deleting connection:', error);
+    } catch (err) {
+      const message = err.response?.data?.error || 'Failed to delete connection';
+      setError(message);
     }
   };
 
@@ -88,6 +102,12 @@ function App() {
 
   return (
     <div className="app">
+      {error && (
+        <div className="error-banner">
+          <span>{error}</span>
+          <button onClick={clearError} className="error-close">&times;</button>
+        </div>
+      )}
       <header className="app-header">
         <h1>What's Next - Knowledge Graph</h1>
         <p>Track people and events with connections</p>

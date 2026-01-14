@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
-const db = require('./db');
 
 const app = express();
 const PORT = 3001;
@@ -179,6 +178,21 @@ app.delete('/api/events/:id', (req, res) => {
   if (!deleted) {
     return res.status(404).json({ error: 'Event not found' });
   }
+
+  // Clear eventId references from people
+  for (const [id, person] of graph.people.entries()) {
+    if (person.eventId === req.params.id) {
+      graph.people.set(id, { ...person, eventId: null });
+    }
+  }
+
+  // Clear eventId references from connections
+  for (const [id, conn] of graph.connections.entries()) {
+    if (conn.eventId === req.params.id) {
+      graph.connections.set(id, { ...conn, eventId: null });
+    }
+  }
+
   res.status(204).send();
 });
 
@@ -190,17 +204,28 @@ app.post('/api/connections', (req, res) => {
     return res.status(400).json({ error: 'From and to are required' });
   }
 
+  // Prevent self-connections
+  if (from === to) {
+    return res.status(400).json({ error: 'Cannot connect a person to themselves' });
+  }
+
   if (!graph.people.has(from) || !graph.people.has(to)) {
     return res.status(404).json({ error: 'One or both people not found' });
   }
 
   const key = connectionKey(from, to);
+
+  // Check for duplicate connections
+  if (graph.connections.has(key)) {
+    return res.status(409).json({ error: 'Connection already exists between these people' });
+  }
+
   const connection = {
     id: key,
     from,
     to,
     relationshipType: relationshipType || 'knows',
-    strength: strength || 1,
+    strength: Math.min(5, Math.max(1, parseInt(strength) || 1)),
     notes: notes || '',
     eventId: eventId || null,
     createdAt: new Date().toISOString(),
